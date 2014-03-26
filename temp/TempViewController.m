@@ -7,6 +7,7 @@
 //
 
 #import "TempViewController.h"
+#import "DAReloadActivityButton.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface TempViewController ()
@@ -17,6 +18,8 @@
 
 @synthesize tempLabel = _templabel;
 @synthesize timeLabel = _timeLabel;
+@synthesize refreshButton = _refreshButton;
+@synthesize alert = _alert;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -41,16 +44,37 @@
     gradient.frame = self.view.bounds;
     [self.view.layer insertSublayer:gradient atIndex:0];
     
-    requester = [[TemperatureRequester alloc] init];
-	[requester setDelegate:self];
+    self.refreshButton = [[DAReloadActivityButton alloc] init];
+    self.refreshButton.center = CGPointMake(20, 540);
+    [self.refreshButton addTarget:self action:@selector(updateTemperatue:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.refreshButton];
+    [self.refreshButton startAnimating];
     
-	// Do any additional setup after loading the view.
+    self.alert = [[UIAlertView alloc] initWithTitle:@"Network error" message:@"Could not connect to the server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    
+    [self requestTemperature];
+}
+
+-(void)updateTemperatue:(DAReloadActivityButton *)button{
+    [button startAnimating];
+    [self requestTemperature];
 }
 
 
 -(void)updateTemperatureDisplay:(NSInteger)update :(NSInteger)temp{
-    self.tempLabel.text = [@(temp) stringValue];
-    self.timeLabel.text = [[@(update) stringValue] stringByAppendingString: @" minutes ago"];
+    [self.refreshButton stopAnimating];
+    if (update<0) {
+        [self.alert show];
+    }
+    else{
+        self.tempLabel.text = [[@(temp) stringValue] stringByAppendingString:@"°"];
+        self.timeLabel.text = [[@(update) stringValue] stringByAppendingString: @" minutes ago"];
+    }
+}
+
+-(void)requestTemperature{
+    requester = [[TemperatureRequester alloc] init];
+	[requester setDelegate:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -58,5 +82,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 @end

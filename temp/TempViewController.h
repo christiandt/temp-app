@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TemperatureRequester.h"
+#import "DAReloadActivityButton.h"
 
 @interface TempViewController : UIViewController<SubClassDelegate>{
     UILabel *tempLabel;
@@ -17,5 +18,7 @@
 
 @property (nonatomic, retain) IBOutlet UILabel *tempLabel;
 @property (nonatomic, retain) IBOutlet UILabel *timeLabel;
+@property (nonatomic, retain) DAReloadActivityButton *refreshButton;
+@property (nonatomic, retain) UIAlertView *alert;
 
 @end
