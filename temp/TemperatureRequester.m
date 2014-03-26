@@ -62,7 +62,7 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     // The request has failed for some reason!
     // Check the error var
-    [[self delegate] updateTemperatureDisplay:-1:0];
+    [[self delegate] showAlertMessage:[error localizedDescription]];
 }
 
 

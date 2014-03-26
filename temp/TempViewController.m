@@ -63,18 +63,19 @@
 
 -(void)updateTemperatureDisplay:(NSInteger)update :(NSInteger)temp{
     [self.refreshButton stopAnimating];
-    if (update<0) {
-        [self.alert show];
-    }
-    else{
-        self.tempLabel.text = [[@(temp) stringValue] stringByAppendingString:@"°"];
-        self.timeLabel.text = [[@(update) stringValue] stringByAppendingString: @" minutes ago"];
-    }
+    self.tempLabel.text = [[@(temp) stringValue] stringByAppendingString:@"°"];
+    self.timeLabel.text = [[@(update) stringValue] stringByAppendingString: @" minutes ago"];
 }
 
 -(void)requestTemperature{
     requester = [[TemperatureRequester alloc] init];
 	[requester setDelegate:self];
+}
+
+-(void)showAlertMessage:(NSString *)message{
+    [self.refreshButton stopAnimating];
+    [self.alert setMessage:message];
+    [self.alert show];
 }
 
 - (void)didReceiveMemoryWarning

@@ -10,6 +10,7 @@
 
 @protocol SubClassDelegate
 - (void)updateTemperatureDisplay:(NSInteger)update :(NSInteger)temp;
+- (void)showAlertMessage:(NSString *)message;
 @end
 
 @interface TemperatureRequester : NSObject{
