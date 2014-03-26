@@ -44,11 +44,17 @@
     gradient.frame = self.view.bounds;
     [self.view.layer insertSublayer:gradient atIndex:0];
     
+    NSInteger screenHeight = self.view.bounds.size.height;
+    //NSInteger screenWidth = self.view.bounds.size.width;
+    NSInteger margin = 20;
+    
+    
     self.refreshButton = [[DAReloadActivityButton alloc] init];
-    self.refreshButton.center = CGPointMake(20, 540);
+    self.refreshButton.center = CGPointMake(margin, screenHeight-margin);
     [self.refreshButton addTarget:self action:@selector(updateTemperatue:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.refreshButton];
     [self.refreshButton startAnimating];
+    
     
     self.alert = [[UIAlertView alloc] initWithTitle:@"Network error" message:@"Could not connect to the server" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     
