@@ -17,7 +17,10 @@
 
 -(id)init{
     // Create the request.
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://snusken.motorvei.com/temp/api/now/"]];
+    NSString *twine_id = @"0000242ee1dea1de";
+    NSString *access_key = @"934781e7fbdc2b1f578444d858ac";
+    NSString *url = [NSString stringWithFormat:@"https://twine.cc/%@/rt?cached=1&access_key=%@", twine_id, access_key];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     
     // Create url connection and fire request
     [NSURLConnection connectionWithRequest:request delegate:self];
@@ -51,9 +54,14 @@
     // The request is complete and data has been received
     // You can parse the stuff in your instance variable now
     NSError *e = nil;
-    NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData: _responseData options: NSJSONReadingMutableContainers error: &e];
-    self.update = [jsonArray[0] integerValue];
-    self.temperature = [jsonArray[1] integerValue];
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData: _responseData options: NSJSONReadingMutableContainers error: &e];
+    NSArray *values = jsonDict[@"values"];
+    
+    double fahrenheit = [values[1][1] doubleValue]/100;
+    double celsius = (fahrenheit-32)*5/9;
+    
+    self.update = [jsonDict[@"age"] integerValue]/60;
+    self.temperature = celsius;
 
     [[self delegate] updateTemperatureDisplay:self.update:self.temperature];
     
